@@ -1,5 +1,6 @@
 package com.zdroba.multipitchbuddy.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -20,8 +21,9 @@ data class ClimbEvent(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
     var time: Instant,
-    var altitude: Double,
+    var altitude: Double? = null,
     var event: Event,
-    var notes: String,
+    var notes: String? = null,
+    @ColumnInfo(index = true)
     var sessionId: Long
 ) {}
