@@ -8,5 +8,7 @@ enum class Event {
     MANUAL_NOTE,
     ERROR,
     PITCH_CHANGED,
-    BAROMETER_READING
+    BAROMETER_READING,
+    RETREAT,
+    CLIMB_COMPLETED // for sport climbing only instead of PITCH_CHANGED
 }

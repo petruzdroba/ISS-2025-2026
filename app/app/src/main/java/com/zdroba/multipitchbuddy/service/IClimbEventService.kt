@@ -1,10 +1,9 @@
 package com.zdroba.multipitchbuddy.service
 
 import com.zdroba.multipitchbuddy.entity.ClimbEvent
-import com.zdroba.multipitchbuddy.service.classification.ClassificationStrategy
 import kotlinx.coroutines.flow.Flow
 
-interface IClimbEventService: ClassificationStrategy {
+interface IClimbEventService {
     val lastEvent: Flow<ClimbEvent?>
 
     suspend fun start()
