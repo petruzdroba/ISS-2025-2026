@@ -7,5 +7,6 @@ enum class Event {
     REST,
     MANUAL_NOTE,
     ERROR,
+    PITCH_CHANGED,
     BAROMETER_READING
 }
