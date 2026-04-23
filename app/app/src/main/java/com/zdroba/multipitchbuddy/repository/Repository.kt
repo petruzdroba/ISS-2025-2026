@@ -4,5 +4,7 @@ interface Repository<T,K> {
 
     suspend fun save(entity: T)
 
+    suspend fun update(entity: T)
+
     suspend fun getById(id: K): T;
 }

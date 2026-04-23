@@ -13,6 +13,11 @@ class SessionRepository(private val dao: SessionDao, private val logger: Logger 
         logger.debug("Saved Session {id=%d}", entity.id)
     }
 
+    override suspend fun update(entity: Session) {
+        dao.update(entity)
+        logger.debug("Updated Session {id=%d}", entity.id)
+    }
+
     override suspend fun getById(id: Long): Session {
         return dao.getById(id)?: throw NotFoundException("Session $id not found");
     }

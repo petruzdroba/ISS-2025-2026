@@ -9,4 +9,6 @@ interface IClimbEventService {
 
     suspend fun processReading(reading: AltitudeReading): ClimbEvent?
     suspend fun save(event: ClimbEvent)
+
+    fun setSession(sessionId: Long)
 }
