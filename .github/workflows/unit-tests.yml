@@ -19,15 +19,15 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Grant execute permission for gradlew
+      - name: Grant execute permission
         run: chmod +x app/gradlew
 
       - name: Run unit tests
-        run: cd app && ./gradlew testDebugUnitTest
+        run: cd app && ./gradlew :app:testDebugUnitTest
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
-          path: app/build/test-results/testDebugUnitTest/
+          path: app/app/build/test-results/testDebugUnitTest/
