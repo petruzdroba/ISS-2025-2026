@@ -6,17 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.time.Instant
 
-@Entity(
-    tableName = "sessions",
-    foreignKeys = [
-        ForeignKey(
-            entity = User::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("userId"),
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
-)
+@Entity(tableName = "sessions")
 data class Session(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
