@@ -17,6 +17,8 @@ class AltitudeRecorderService(context: Context): IAltitudeRecorderService {
 
     private val _readings = MutableStateFlow<AltitudeReading?>(null)
     override val readings: Flow<AltitudeReading?> = _readings.asStateFlow()
+    override val lastAltitude: Double?
+        get() = _readings.value?.altitude
 
     private var sensorEventListener: SensorEventListener? = null
     private var lastEmittedAltitude: Double? = null

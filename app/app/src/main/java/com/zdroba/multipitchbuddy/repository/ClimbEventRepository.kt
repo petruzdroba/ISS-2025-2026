@@ -13,6 +13,10 @@ class ClimbEventRepository(private val dao: ClimbEventDao, private val logger: L
         logger.debug("Saved ClimbEvent {id=%d}", entity.id)
     }
 
+    override suspend fun update(entity: ClimbEvent) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getById(id: Long): ClimbEvent {
         return dao.getById(id)?: throw NotFoundException("ClimbEvent $id not found");
     }

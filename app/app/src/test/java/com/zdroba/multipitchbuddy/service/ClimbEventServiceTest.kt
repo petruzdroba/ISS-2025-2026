@@ -20,6 +20,10 @@ class ClimbEventServiceTest {
         override suspend fun save(entity: ClimbEvent) {
             savedEvents.add(entity)
         }
+
+        override suspend fun update(entity: ClimbEvent) {
+        }
+
         override suspend fun getById(id: Long): ClimbEvent {
             return savedEvents.first { it.id == id }
         }

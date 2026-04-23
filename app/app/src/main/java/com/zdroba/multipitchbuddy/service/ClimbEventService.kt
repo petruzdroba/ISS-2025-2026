@@ -57,7 +57,7 @@ class ClimbEventService(
         return climbEvent
     }
 
-    fun setSession(sessionId: Long) {
+    override fun setSession(sessionId: Long) {
         this.sessionId = sessionId
     }
 }
