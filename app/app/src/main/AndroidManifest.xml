@@ -3,7 +3,12 @@
           xmlns:tools="http://schemas.android.com/tools"
 >
 
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
+            android:name=".App"
             android:allowBackup="true"
             android:fullBackupContent="@xml/backup_rules"
             android:dataExtractionRules="@xml/data_extraction_rules"
