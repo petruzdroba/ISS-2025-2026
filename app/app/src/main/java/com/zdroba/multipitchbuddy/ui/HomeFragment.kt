@@ -20,13 +20,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val sessionService = (requireActivity().application as App).sessionService
+        val app = requireActivity().application as App
+        val sessionService = app.sessionService
 
         view.findViewById<Button>(R.id.btn_start_session).setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, SessionFragment())
-                .addToBackStack(null)
-                .commit()
+            lifecycleScope.launch {
+                sessionService.start()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, SessionFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
     }
 }
