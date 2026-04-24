@@ -16,7 +16,7 @@ import java.time.Instant
 class SessionService(
     private val locationProvider: ILocationProvider,
     private val altitudeService: IAltitudeRecorderService,
-    private val climbEventService: IClimbEventService,
+    val climbEventService: IClimbEventService,
     private val sessionRepository: ISessionRepository,
 ): ISessionService {
 
@@ -34,14 +34,15 @@ class SessionService(
     override suspend fun start() {
         val location = locationProvider.getLocation()
 
-        val session = Session(
+        val newSession = Session(
             userId = null, // TODO: pass logged in user id if available
             start = Instant.now(),
             latitude = location?.first,
             longitude = location?.second
         )
 
-        sessionRepository.save(session)
+        val id = sessionRepository.save(newSession)
+        val session = newSession.copy(id = id)
         _currentSession.value = session
         _isRecording.value = true
         _events.value = emptyList()
