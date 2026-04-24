@@ -24,14 +24,14 @@ class LogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val app = requireActivity().application as App
-        val sessionRepository = app.sessionRepository
+        val crudSessionService = app.crudSessionService
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.session_list)
         val emptyText = view.findViewById<TextView>(R.id.txt_empty)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         lifecycleScope.launch {
-            val sessions = sessionRepository.getAll()
+            val sessions = crudSessionService.getAll()
 
             if (sessions.isEmpty()) {
                 emptyText.visibility = View.VISIBLE
@@ -42,7 +42,10 @@ class LogFragment : Fragment() {
                 recyclerView.adapter = SessionAdapter(
                     sessions,
                     onClick = { session ->
-                        // TODO: navigate to session details
+                        parentFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, SessionDetailsFragment.newInstance(session.id))
+                            .addToBackStack(null)
+                            .commit()
                     },
                     onLongClick = { session ->
                         AlertDialog.Builder(requireContext())
@@ -50,7 +53,7 @@ class LogFragment : Fragment() {
                             .setMessage("Do you really want to delete this session?")
                             .setPositiveButton("Delete") { _, _ ->
                                 lifecycleScope.launch {
-                                    sessionRepository.delete(session.id)
+                                    crudSessionService.delete(session.id)
                                     parentFragmentManager.beginTransaction()
                                         .replace(R.id.fragment_container, LogFragment())
                                         .commit()
