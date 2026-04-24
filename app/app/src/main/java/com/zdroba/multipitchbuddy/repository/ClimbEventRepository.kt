@@ -28,4 +28,8 @@ class ClimbEventRepository(private val dao: ClimbEventDao, private val logger: L
     override suspend fun getAll(): List<ClimbEvent> {
         return dao.getAll()
     }
+
+    override suspend fun getBySessionId(key: Long): List<ClimbEvent> {
+        return dao.getBySessionId(key)
+    }
 }
