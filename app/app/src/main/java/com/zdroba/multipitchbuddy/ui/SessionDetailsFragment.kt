@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zdroba.multipitchbuddy.App
 import com.zdroba.multipitchbuddy.R
 import com.zdroba.multipitchbuddy.entity.ClimbEvent
@@ -84,7 +84,7 @@ class SessionDetailsFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        view.findViewById<FloatingActionButton>(R.id.btn_submit).setOnClickListener {
+        view.findViewById<ImageButton>(R.id.btn_submit).setOnClickListener {
             lifecycleScope.launch {
                 val session = crudSessionService.getById(sessionId)
                 crudSessionService.update(session.copy(name = nameInput.text.toString()))
@@ -92,7 +92,7 @@ class SessionDetailsFragment : Fragment() {
             }
         }
 
-        view.findViewById<FloatingActionButton>(R.id.btn_add_event).setOnClickListener {
+        view.findViewById<ImageButton>(R.id.btn_add_event).setOnClickListener {
             // TODO: open add event modal
         }
     }

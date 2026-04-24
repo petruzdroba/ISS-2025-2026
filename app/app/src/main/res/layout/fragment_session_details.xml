@@ -27,6 +27,7 @@
                 android:paddingBottom="16dp" />
 
         <EditText
+                style="@style/GlassInput"
                 android:id="@+id/session_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,24 +53,22 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="8dp">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageButton
                 android:id="@+id/btn_add_event"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:src="@android:drawable/ic_input_add" />
+                style="@style/GlassRoundButton"
+                android:src="@drawable/ic_add"
+                android:contentDescription="Add event" />
 
         <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageButton
                 android:id="@+id/btn_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:src="@android:drawable/checkbox_on_background" />
+                style="@style/GlassRoundButton"
+                android:src="@drawable/ic_check"
+                android:contentDescription="Submit" />
 
     </LinearLayout>
 

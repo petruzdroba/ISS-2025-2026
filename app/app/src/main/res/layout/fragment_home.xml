@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
+              android:background="@android:color/transparent"
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:padding="16dp">
@@ -23,39 +24,34 @@
             android:paddingBottom="24dp" />
 
     <Button
+            style="@style/GlassButton"
             android:id="@+id/btn_start_session"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Start Climbing" />
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginTop="24dp"
-            app:cardCornerRadius="8dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            style="@style/GlassCard">
 
-        <LinearLayout
+        <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:text="Safety Check from the Developer"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp" />
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Safety Check from the Developer"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:paddingBottom="8dp" />
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="• Always tie in properly.\n• Double-check with a partner.\n• Perform maneuvers safely and by the book.\n• Never take unnecessary risks.\n• Give clear and concise instructions."
+                android:lineSpacingExtra="6dp" />
 
-            <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Always tie in properly.\n• Double-check with a partner.\n• Perform maneuvers safely and by the book.\n• Never take unnecessary risks.\n• Give clear and concise instructions."
-                    android:lineSpacingExtra="6dp" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </LinearLayout>
 
 </LinearLayout>
