@@ -11,8 +11,7 @@ import com.zdroba.multipitchbuddy.service.CrudClimbEventService
 import com.zdroba.multipitchbuddy.service.CrudSessionService
 import com.zdroba.multipitchbuddy.service.SessionService
 import com.zdroba.multipitchbuddy.utils.AndroidLocationProvider
-import com.zdroba.multipitchbuddy.service.classification.BalancedStrategy
-import com.zdroba.multipitchbuddy.ui.GradientGenerator
+import com.zdroba.multipitchbuddy.service.classification.OriginalStrategy
 
 class App: Application() {
 
@@ -22,7 +21,7 @@ class App: Application() {
     val climbEventRepository by lazy { ClimbEventRepository(database.climbEventDao()) }
 
     val altitudeService by lazy { AltitudeRecorderService(this) }
-    val climbEventService by lazy { ClimbEventService(BalancedStrategy(), climbEventRepository) }
+    val climbEventService by lazy { ClimbEventService(OriginalStrategy(), climbEventRepository) }
     val locationProvider by lazy { AndroidLocationProvider(this) }
     val sessionService by lazy { SessionService(locationProvider, altitudeService, climbEventService, sessionRepository) }
 
