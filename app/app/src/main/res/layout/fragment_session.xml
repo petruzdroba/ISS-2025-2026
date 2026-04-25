@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+    <Button
+            style="@style/GlassButton"
+            android:id="@+id/btn_end_session"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="End Climbing"
+            android:layout_alignParentTop="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/event_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/btn_end_session"
+            android:layout_marginTop="16dp" />
+
+    <ImageButton
+            android:id="@+id/btn_add_note"
+            style="@style/GlassRoundButton"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add"
+            android:contentDescription="Add note" />
+
+</RelativeLayout>

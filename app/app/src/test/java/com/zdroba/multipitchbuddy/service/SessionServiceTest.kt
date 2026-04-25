@@ -36,14 +36,30 @@ class SessionServiceTest {
     private val mockClimbEventService = object : IClimbEventService {
         override val lastEvent: Flow<ClimbEvent?> = MutableStateFlow(null)
         override suspend fun processReading(reading: AltitudeReading): ClimbEvent? = processReadingResult
-        override suspend fun save(event: ClimbEvent) { savedEvents.add(event) }
+        override suspend fun save(event: ClimbEvent) {
+            savedEvents.add(event)
+        }
+
         override fun setSession(sessionId: Long) {}
     }
 
     private val mockSessionRepository = object : ISessionRepository {
-        override suspend fun save(entity: Session) { savedSessions.add(entity) }
-        override suspend fun update(entity: Session) { updatedSessions.add(entity) }
+        override suspend fun save(entity: Session): Long {
+            savedSessions.add(entity)
+            return 0L// for sessionId test
+        }
+
+        override suspend fun update(entity: Session) {
+            updatedSessions.add(entity)
+        }
+
+        override suspend fun delete(id: Long) {
+        }
+
         override suspend fun getById(id: Long) = savedSessions.first { it.id == id }
+        override suspend fun getAll(): List<Session> {
+            return TODO("Provide the return value")
+        }
     }
 
     private val mockLocationProvider = object : ILocationProvider {
@@ -60,7 +76,8 @@ class SessionServiceTest {
         mockReadings.value = null
         lastAltitudeOverride = null
         processReadingResult = null
-        service = SessionService(mockLocationProvider,mockAltitudeService, mockClimbEventService, mockSessionRepository)
+        service =
+            SessionService(mockLocationProvider, mockAltitudeService, mockClimbEventService, mockSessionRepository)
     }
 
     @Test
@@ -171,7 +188,9 @@ class SessionServiceTest {
     @Test
     fun `session has null coordinates when location unavailable`() = runBlocking {
         val serviceNoLocation = SessionService(
-            object : ILocationProvider { override fun getLocation() = null },
+            object : ILocationProvider {
+                override fun getLocation() = null
+            },
             mockAltitudeService,
             mockClimbEventService,
             mockSessionRepository

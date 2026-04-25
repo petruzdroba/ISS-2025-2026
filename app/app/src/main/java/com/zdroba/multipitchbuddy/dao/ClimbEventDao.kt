@@ -24,4 +24,7 @@ interface ClimbEventDao {
 
     @Query("SELECT * FROM climb_events")
     suspend fun getAll(): List<ClimbEvent>
+
+    @Query("SELECT * FROM climb_events WHERE sessionId = :sessionId")
+    suspend fun getBySessionId(sessionId: Long): List<ClimbEvent>
 }

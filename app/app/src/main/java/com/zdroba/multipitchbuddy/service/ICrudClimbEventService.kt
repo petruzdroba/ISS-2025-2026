@@ -1,7 +1,8 @@
-package com.zdroba.multipitchbuddy.repository
+package com.zdroba.multipitchbuddy.service
 
 import com.zdroba.multipitchbuddy.entity.ClimbEvent
 
-interface IClimbEventRepository: Repository<ClimbEvent, Long> {
+interface ICrudClimbEventService {
+
     suspend fun getBySessionId(key: Long): List<ClimbEvent>
 }

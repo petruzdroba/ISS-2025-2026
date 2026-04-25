@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="16dp">
+
+    <LinearLayout
+            android:id="@+id/header_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit your session"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp" />
+
+        <TextView
+                android:id="@+id/session_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:paddingBottom="16dp" />
+
+        <EditText
+                style="@style/GlassInput"
+                android:id="@+id/session_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Session name"
+                android:maxLength="20"
+                android:inputType="text"
+                android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/event_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/header_section"
+            android:layout_above="@id/bottom_buttons" />
+
+    <LinearLayout
+            android:id="@+id/bottom_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp">
+
+        <ImageButton
+                android:id="@+id/btn_add_event"
+                style="@style/GlassRoundButton"
+                android:src="@drawable/ic_add"
+                android:contentDescription="Add event" />
+
+        <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        <ImageButton
+                android:id="@+id/btn_submit"
+                style="@style/GlassRoundButton"
+                android:src="@drawable/ic_check"
+                android:contentDescription="Submit" />
+
+    </LinearLayout>
+
+</RelativeLayout>
