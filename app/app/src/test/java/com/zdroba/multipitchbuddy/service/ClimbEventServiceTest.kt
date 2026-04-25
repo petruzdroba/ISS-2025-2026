@@ -17,15 +17,28 @@ class ClimbEventServiceTest {
     private val savedEvents = mutableListOf<ClimbEvent>()
 
     private val mockRepo = object : IClimbEventRepository {
-        override suspend fun save(entity: ClimbEvent) {
+        override suspend fun save(entity: ClimbEvent): Long {
             savedEvents.add(entity)
+            return 1L;
         }
 
         override suspend fun update(entity: ClimbEvent) {
         }
 
+        override suspend fun delete(id: Long) {
+        }
+
         override suspend fun getById(id: Long): ClimbEvent {
             return savedEvents.first { it.id == id }
+        }
+
+        override suspend fun getAll(): List<ClimbEvent> {
+            return TODO("Provide the return value")
+
+        }
+
+        override suspend fun getBySessionId(key: Long): List<ClimbEvent> {
+            return TODO("Provide the return value")
         }
     }
 
