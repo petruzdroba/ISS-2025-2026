@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zdroba.multipitchbuddy.App
+import com.zdroba.multipitchbuddy.MainActivity
 import com.zdroba.multipitchbuddy.R
 import kotlinx.coroutines.launch
 
@@ -25,6 +27,8 @@ class LogFragment : Fragment() {
 
         val app = requireActivity().application as App
         val crudSessionService = app.crudSessionService
+
+        view.background = MainActivity.appBackground?.toDrawable(resources)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.session_list)
         val emptyText = view.findViewById<TextView>(R.id.txt_empty)

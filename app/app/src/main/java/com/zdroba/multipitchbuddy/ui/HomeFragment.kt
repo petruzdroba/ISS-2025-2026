@@ -10,6 +10,9 @@ import androidx.lifecycle.lifecycleScope
 import com.zdroba.multipitchbuddy.App
 import com.zdroba.multipitchbuddy.R
 import kotlinx.coroutines.launch
+import androidx.core.graphics.drawable.toDrawable
+import com.zdroba.multipitchbuddy.MainActivity
+
 
 class HomeFragment : Fragment() {
 
@@ -22,6 +25,8 @@ class HomeFragment : Fragment() {
 
         val app = requireActivity().application as App
         val sessionService = app.sessionService
+
+        view.background = MainActivity.appBackground?.toDrawable(resources)
 
         view.findViewById<Button>(R.id.btn_start_session).setOnClickListener {
             lifecycleScope.launch {

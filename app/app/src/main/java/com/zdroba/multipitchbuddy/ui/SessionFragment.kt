@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.lifecycle.lifecycleScope
 import com.zdroba.multipitchbuddy.App
+import com.zdroba.multipitchbuddy.MainActivity
 import com.zdroba.multipitchbuddy.R
 import com.zdroba.multipitchbuddy.entity.ClimbEvent
 import com.zdroba.multipitchbuddy.entity.Event
@@ -33,6 +35,8 @@ class SessionFragment : Fragment() {
 
         val app = requireActivity().application as App
         val sessionService = app.sessionService
+
+        view.background = MainActivity.appBackground?.toDrawable(resources)
 
         adapter = ClimbEventAdapter(eventList)
         val recyclerView = view.findViewById<RecyclerView>(R.id.event_list)

@@ -10,7 +10,7 @@
 
         <item name="materialButtonStyle">@style/GlassButton</item>
         <item name="editTextStyle">@style/GlassInput</item>
-        <item name="android:windowBackground">@drawable/blue</item>
+<!--        <item name="android:windowBackground">@drawable/blue</item>-->
         <item name="bottomNavigationStyle">@style/GlassBottomNav</item>
 
     </style>

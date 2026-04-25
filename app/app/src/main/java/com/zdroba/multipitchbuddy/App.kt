@@ -12,6 +12,7 @@ import com.zdroba.multipitchbuddy.service.CrudSessionService
 import com.zdroba.multipitchbuddy.service.SessionService
 import com.zdroba.multipitchbuddy.utils.AndroidLocationProvider
 import com.zdroba.multipitchbuddy.service.classification.BalancedStrategy
+import com.zdroba.multipitchbuddy.ui.GradientGenerator
 
 class App: Application() {
 

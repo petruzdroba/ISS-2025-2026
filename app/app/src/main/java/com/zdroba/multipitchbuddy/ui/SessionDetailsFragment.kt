@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zdroba.multipitchbuddy.App
+import com.zdroba.multipitchbuddy.MainActivity
 import com.zdroba.multipitchbuddy.R
 import com.zdroba.multipitchbuddy.entity.ClimbEvent
 import com.zdroba.multipitchbuddy.entity.Event
@@ -47,6 +49,8 @@ class SessionDetailsFragment : Fragment() {
         val crudSessionService = app.crudSessionService
         val crudClimbEventService = app.crudClimbEventService
         val sessionId = arguments?.getLong(ARG_SESSION_ID) ?: return
+
+        view.background = MainActivity.appBackground?.toDrawable(resources)
 
         val dateText = view.findViewById<TextView>(R.id.session_date)
         val nameInput = view.findViewById<EditText>(R.id.session_name_input)
