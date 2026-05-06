@@ -1,5 +1,6 @@
 package com.zdroba.multipitchbuddy.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -56,9 +57,44 @@ class SessionDetailsFragment : Fragment() {
         val nameInput = view.findViewById<EditText>(R.id.session_name_input)
         val recyclerView = view.findViewById<RecyclerView>(R.id.event_list)
 
-        adapter = ClimbEventAdapter(eventList)
+        adapter = ClimbEventAdapter(
+            events = eventList,
+            onEdit = { event ->
+                EditEventDialog(
+                    event = event,
+                    onConfirm = { updated ->
+                        lifecycleScope.launch {
+                            crudClimbEventService.update(updated)
+                            val idx = eventList.indexOfFirst { it.id == updated.id }
+                            if (idx >= 0) {
+                                eventList[idx] = updated
+                                adapter.notifyItemChanged(idx)
+                            }
+                        }
+                    }
+                ).show(parentFragmentManager, "EditEventDialog")
+            },
+            onDelete = { event ->
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Event")
+                    .setMessage("Are you sure?")
+                    .setPositiveButton("Delete") { _, _ ->
+                        lifecycleScope.launch {
+                            crudClimbEventService.delete(event.id)
+                            val idx = eventList.indexOfFirst { it.id == event.id }
+                            if (idx >= 0) {
+                                eventList.removeAt(idx)
+                                adapter.notifyItemRemoved(idx)
+                            }
+                        }
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+        )
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
+        adapter.attachSwipeHelper(recyclerView)
 
         val formatter = DateTimeFormatter.ofPattern("EEEE, MMMM d, y, H:mm")
             .withZone(ZoneId.systemDefault())
@@ -68,7 +104,6 @@ class SessionDetailsFragment : Fragment() {
             dateText.text = formatter.format(session.start)
             nameInput.setText(session.name ?: "")
 
-            // load events for this session
             val events = crudClimbEventService.getBySessionId(sessionId)
             val sorted = events.sortedWith(compareBy(
                 { it.event != Event.SESSION_STARTED },
@@ -97,7 +132,25 @@ class SessionDetailsFragment : Fragment() {
         }
 
         view.findViewById<ImageButton>(R.id.btn_add_event).setOnClickListener {
-            // TODO: open add event modal
+            lifecycleScope.launch {
+                val session = crudSessionService.getById(sessionId)
+                AddEventDialog(
+                    sessionId = sessionId,
+                    sessionStart = session.start,
+                    onConfirm = { newEvent ->
+                        lifecycleScope.launch {
+                            crudClimbEventService.save(newEvent)
+                            eventList.add(newEvent)
+                            eventList.sortWith(compareBy(
+                                { it.event != Event.SESSION_STARTED },
+                                { it.event == Event.SESSION_ENDED },
+                                { it.time }
+                            ))
+                            adapter.notifyDataSetChanged()
+                        }
+                    }
+                ).show(parentFragmentManager, "AddEventDialog")
+            }
         }
     }
 }

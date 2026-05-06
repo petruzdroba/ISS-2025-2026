@@ -8,6 +8,9 @@
 
         <item name="android:textColor">#FFFFFF</item>
 
+        <item name="alertDialogTheme">@style/GlassDialog</item>
+        <item name="android:alertDialogTheme">@style/GlassDialog</item>
+
         <item name="materialButtonStyle">@style/GlassButton</item>
         <item name="editTextStyle">@style/GlassInput</item>
 <!--        <item name="android:windowBackground">@drawable/blue</item>-->
@@ -67,6 +70,25 @@
         <item name="android:background">@drawable/bg_glass_nav</item>
         <item name="itemIconTint">@android:color/white</item>
         <item name="itemTextColor">@android:color/white</item>
+    </style>
+
+    <style name="GlassDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/bg_glass_card</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorAccent">#FFFFFF</item>
+    </style>
+
+    <style name="GlassSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/bg_glass_card</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="GlassSpinnerItem" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:background">@drawable/bg_glass_card</item>
+        <item name="android:padding">12dp</item>
     </style>
 
 </resources>

@@ -14,15 +14,17 @@ class ClimbEventRepository(private val dao: ClimbEventDao, private val logger: L
     }
 
     override suspend fun update(entity: ClimbEvent) {
-        TODO("Not yet implemented")
+        dao.update(entity)
+        logger.debug("Updated ClimbEvent {id=%d}", entity.id)
     }
 
     override suspend fun delete(id: Long) {
-        TODO("Not yet implemented")
+        dao.delete(getById(id))
+        logger.debug("Deleted ClimbEvent {id=%id}", id)
     }
 
     override suspend fun getById(id: Long): ClimbEvent {
-        return dao.getById(id)?: throw NotFoundException("ClimbEvent $id not found");
+        return dao.getById(id)?: throw NotFoundException("ClimbEvent $id not found")
     }
 
     override suspend fun getAll(): List<ClimbEvent> {
