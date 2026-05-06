@@ -1,5 +1,6 @@
 package com.zdroba.multipitch_server.entity;
 
+import com.zdroba.multipitch_server.dto.UserDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +11,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true, length = 32)
+    private String username;
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
@@ -18,8 +21,9 @@ public class User {
 
     public User() {}
 
-    public User(String email, String password) {
+    public User(String email, String username, String password) {
         this.email = email;
+        this.username = username;
         this.password = password;
     }
 
@@ -45,5 +49,17 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public UserDto toDto(){
+        return new UserDto(this.id, this.email, this.username);
     }
 }
