@@ -24,7 +24,7 @@ class ClimbEventRepository(private val dao: ClimbEventDao, private val logger: L
     }
 
     override suspend fun getById(id: Long): ClimbEvent {
-        return dao.getById(id)?: throw NotFoundException("ClimbEvent $id not found");
+        return dao.getById(id)?: throw NotFoundException("ClimbEvent $id not found")
     }
 
     override suspend fun getAll(): List<ClimbEvent> {

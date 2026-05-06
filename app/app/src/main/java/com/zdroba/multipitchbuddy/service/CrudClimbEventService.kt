@@ -6,6 +6,10 @@ import com.zdroba.multipitchbuddy.repository.IClimbEventRepository
 class CrudClimbEventService(
     private val climbEventRepository: IClimbEventRepository,
 ): ICrudClimbEventService {
+    override suspend fun save(entity: ClimbEvent): Long {
+        return climbEventRepository.save(entity)
+    }
+
     override suspend fun getBySessionId(key: Long): List<ClimbEvent> {
         return climbEventRepository.getBySessionId(key)
     }
