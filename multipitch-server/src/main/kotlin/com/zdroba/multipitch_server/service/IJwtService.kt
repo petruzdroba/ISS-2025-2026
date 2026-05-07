@@ -15,4 +15,6 @@ interface IJwtService {
     fun getUsernameFromToken(token: String): String
 
     fun getEmailFromToken(token: String): String
+
+    fun getTokenType(token:String):String
 }

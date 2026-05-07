@@ -8,6 +8,7 @@ import com.zdroba.multipitch_server.service.IAuthService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.Authentication
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -28,6 +29,7 @@ class AuthRestController(
             request.email,
             request.username,
             request.password,
+            request.rememberMe
         )
     }
 
@@ -36,7 +38,8 @@ class AuthRestController(
     fun login(@Valid @RequestBody request: LoginRequest): AuthResponse {
         return service.login(
             request.email,
-            request.password
+            request.password,
+            request.rememberMe
         )
     }
 
@@ -44,5 +47,12 @@ class AuthRestController(
     @GetMapping("/me")
     fun me(authentication: Authentication): UserDto {
         return service.me(authentication.name.toLong())// this is the main claim -> "id"
+    }
+
+    @PostMapping("/refresh")
+    @ResponseStatus(HttpStatus.OK)
+    fun refresh(authentication: Authentication): AuthResponse {
+        val jwt = authentication.credentials as Jwt
+        return service.refresh(jwt.tokenValue)
     }
 }

@@ -20,7 +20,8 @@ class AuthService(
     override fun register(
         email: String,
         username: String,
-        password: String
+        password: String,
+        rememberMe: Boolean
     ): AuthResponse {
         repository.findByEmail(email)
             .ifPresent { throw AlreadyExistsException("User with email: $email already exists") }
@@ -33,12 +34,12 @@ class AuthService(
 
         return AuthResponse(
             jwtService.generateAccessToken(dto),
-            jwtService.generateRefreshToken(dto),
+            if (rememberMe) jwtService.generateRefreshToken(dto) else null,
             dto
         )
     }
 
-    override fun login(email: String, password: String): AuthResponse {
+    override fun login(email: String, password: String, rememberMe: Boolean): AuthResponse {
         val user = repository.findByEmail(email)
             .orElseThrow { NotFoundException("User with email: $email does not exist") }
 
@@ -49,7 +50,7 @@ class AuthService(
         val dto:UserDto = user.toDto()
         return AuthResponse(
             jwtService.generateAccessToken(dto),
-            jwtService.generateRefreshToken(dto),
+            if (rememberMe) jwtService.generateRefreshToken(dto) else null,
             dto
         )
     }
@@ -66,5 +67,23 @@ class AuthService(
             .orElseThrow { NotFoundException("User with id: $id not found") }
 
         repository.delete(user)
+    }
+
+    override fun refresh(refreshToken: String): AuthResponse {
+
+        val tokenType = jwtService.getTokenType(refreshToken)
+        if (tokenType != "refresh")
+            throw InvalidCredentialsException()
+
+        val id = jwtService.getIdFromToken(refreshToken)
+        val user = repository.findById(id)
+            .orElseThrow { NotFoundException("User with $id was not found") }
+
+        val dto = user.toDto()
+        return AuthResponse(
+            jwtService.generateAccessToken(dto),
+            jwtService.generateRefreshToken(dto),
+            dto
+        )
     }
 }

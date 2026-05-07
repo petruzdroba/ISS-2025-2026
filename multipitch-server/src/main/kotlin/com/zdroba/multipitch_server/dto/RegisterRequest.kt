@@ -12,5 +12,7 @@ data class RegisterRequest(
     val email: String,
 
     @field:NotBlank
-    val password: String
+    val password: String,
+
+    val rememberMe: Boolean = false
 )

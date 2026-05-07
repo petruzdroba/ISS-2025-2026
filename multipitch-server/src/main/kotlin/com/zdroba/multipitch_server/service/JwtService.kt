@@ -54,9 +54,11 @@ class JwtService(
         .parseSignedClaims(token)
         .payload
 
-    override fun getIdFromToken(token: String): Long = parseClaims(token).get("id", Long::class.java)
+    override fun getIdFromToken(token: String): Long = parseClaims(token).get("id", Int::class.java).toLong()
 
     override fun getUsernameFromToken(token: String): String = parseClaims(token).get("username", String::class.java)
 
     override fun getEmailFromToken(token: String): String = parseClaims(token).get("email", String::class.java)
+
+    override fun getTokenType(token: String): String = parseClaims(token).get("token", String::class.java)
 }
