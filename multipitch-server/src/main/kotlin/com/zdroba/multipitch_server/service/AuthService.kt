@@ -11,7 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class AuthService(private val repository: UserDAO, private val passwordEncoder: PasswordEncoder) : IAuthService {
+class AuthService(
+    private val repository: UserDAO,
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtService: IJwtService
+) : IAuthService {
 
     override fun register(
         email: String,
@@ -25,11 +29,12 @@ class AuthService(private val repository: UserDAO, private val passwordEncoder: 
             .ifPresent { throw AlreadyExistsException("User with username: $username already exists") }
 
         val saved: User = repository.save(User(email, username, passwordEncoder.encode(password)))
+        val dto: UserDto = saved.toDto()
 
         return AuthResponse(
-            "access",
-            "refresh",
-            saved.toDto()
+            jwtService.generateAccessToken(dto),
+            jwtService.generateRefreshToken(dto),
+            dto
         )
     }
 
@@ -41,10 +46,11 @@ class AuthService(private val repository: UserDAO, private val passwordEncoder: 
             throw InvalidCredentialsException()
         }
 
+        val dto:UserDto = user.toDto()
         return AuthResponse(
-            "access",
-            "refresh",
-            user.toDto()
+            jwtService.generateAccessToken(dto),
+            jwtService.generateRefreshToken(dto),
+            dto
         )
     }
 
