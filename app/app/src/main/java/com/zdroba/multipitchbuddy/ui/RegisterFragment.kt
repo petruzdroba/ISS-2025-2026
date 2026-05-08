@@ -9,10 +9,12 @@ import android.widget.CheckBox
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.zdroba.multipitchbuddy.App
 import com.zdroba.multipitchbuddy.R
+import com.zdroba.multipitchbuddy.network.RetrofitClient
 import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
@@ -78,9 +80,17 @@ class RegisterFragment : Fragment() {
                 try {
                     authService.register(email, username, password, rememberMe)
                     (parentFragment as? ProfileFragment)?.onAuthSuccess()
+                } catch (e: retrofit2.HttpException) {
+                    val error = RetrofitClient.parseError(e.response()!!)
+                    val message = error?.message ?: "Something went wrong (${e.code()})"
+                    Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+                } catch (e: java.net.UnknownHostException) {
+                    Snackbar.make(requireView(), "No internet connection", Snackbar.LENGTH_LONG).show()
+                } catch (e: java.net.SocketTimeoutException) {
+                    Snackbar.make(requireView(), "Request timed out", Snackbar.LENGTH_LONG).show()
                 } catch (e: Exception) {
-                    emailLayout.error = "Registration failed"
-                } finally {
+                    Snackbar.make(requireView(), "Unexpected error: ${e.message}", Snackbar.LENGTH_LONG).show()
+                }finally {
                     progress.visibility = View.GONE
                     btnRegister.isEnabled = true
                 }

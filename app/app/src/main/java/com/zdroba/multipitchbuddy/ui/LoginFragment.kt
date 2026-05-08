@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.zdroba.multipitchbuddy.App
 import com.zdroba.multipitchbuddy.R
+import com.zdroba.multipitchbuddy.network.RetrofitClient
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -63,9 +64,16 @@ class LoginFragment : Fragment() {
                     (parentFragment as? ProfileFragment)?.onAuthSuccess()
                     view.findViewById<com.google.android.material.tabs.TabLayout>(R.id.tab_layout)?.visibility =
                         View.GONE
+                } catch (e: retrofit2.HttpException) {
+                    val error = RetrofitClient.parseError(e.response()!!)
+                    val message = error?.message ?: "Something went wrong (${e.code()})"
+                    Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show()
+                } catch (e: java.net.UnknownHostException) {
+                    Snackbar.make(requireView(), "No internet connection", Snackbar.LENGTH_LONG).show()
+                } catch (e: java.net.SocketTimeoutException) {
+                    Snackbar.make(requireView(), "Request timed out", Snackbar.LENGTH_LONG).show()
                 } catch (e: Exception) {
-                    emailLayout.error = "Invalid credentials"
-                    passwordLayout.error = "Invalid credentials"
+                    Snackbar.make(requireView(), "Unexpected error: ${e.message}", Snackbar.LENGTH_LONG).show()
                 } finally {
                     progress.visibility = View.GONE
                     btnLogin.isEnabled = true
