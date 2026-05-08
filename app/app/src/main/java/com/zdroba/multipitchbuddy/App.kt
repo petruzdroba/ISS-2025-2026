@@ -3,6 +3,7 @@ package com.zdroba.multipitchbuddy
 import android.app.Application
 
 import com.zdroba.multipitchbuddy.database.AppDatabase
+import com.zdroba.multipitchbuddy.database.LocalDbSyncManager
 import com.zdroba.multipitchbuddy.network.RetrofitClient
 import com.zdroba.multipitchbuddy.network.TokenDataStore
 import com.zdroba.multipitchbuddy.repository.ClimbEventRepository
@@ -13,6 +14,8 @@ import com.zdroba.multipitchbuddy.service.ClimbEventService
 import com.zdroba.multipitchbuddy.service.CrudClimbEventService
 import com.zdroba.multipitchbuddy.service.CrudSessionService
 import com.zdroba.multipitchbuddy.service.SessionService
+import com.zdroba.multipitchbuddy.service.SyncOrchestrator
+import com.zdroba.multipitchbuddy.service.SyncService
 import com.zdroba.multipitchbuddy.utils.AndroidLocationProvider
 import com.zdroba.multipitchbuddy.service.classification.OriginalStrategy
 
@@ -33,4 +36,14 @@ class App: Application() {
 
     val tokenDataStore by lazy { TokenDataStore(this) }
     val authService by lazy { AuthService(tokenDataStore, RetrofitClient.authApi) }
+
+    val syncService by lazy { SyncService(tokenDataStore, RetrofitClient.syncApi)}
+    val localDbSyncManager by lazy { LocalDbSyncManager(this, database) }
+
+    val syncOrchestrator by lazy {
+        SyncOrchestrator(
+            syncService = syncService,
+            localDbSyncManager = localDbSyncManager
+        )
+    }
 }

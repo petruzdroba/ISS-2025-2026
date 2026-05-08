@@ -23,6 +23,7 @@ class DataService(
         repository.deleteOldestExceptLast3(userId)
     }
 
+    @Transactional(readOnly = true)
     override fun download(userId: Long): SyncResponse {
         val sync = repository.findTop1ByUserIdOrderByCreatedAtDesc(userId)
             .orElseThrow { NotFoundException("No synced data for user $userId") }

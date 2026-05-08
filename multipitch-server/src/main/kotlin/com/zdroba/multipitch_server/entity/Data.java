@@ -20,8 +20,7 @@ public class Data {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(name = "data", nullable = false, columnDefinition = "bytea")
     private byte[] data;
 
     public Data() {

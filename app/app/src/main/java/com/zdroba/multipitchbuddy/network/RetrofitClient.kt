@@ -12,6 +12,12 @@ object RetrofitClient {
         .build()
         .create(AuthApi::class.java)
 
+    val syncApi: SyncApi = Retrofit.Builder()
+        .baseUrl(BuildConfig.API_URL + "/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(SyncApi::class.java)
+
     fun parseError(response: retrofit2.Response<*>): ErrorResponse? {
         return try {
             val gson = com.google.gson.Gson()
