@@ -14,12 +14,14 @@ class AuthService(
     suspend fun register(email: String, username: String, password: String, rememberMe: Boolean): AuthResponse {
         val response = api.register(RegisterRequest(email, username, password, rememberMe))
         tokenDataStore.saveTokens(response.accessToken, response.refreshToken)
+        tokenDataStore.saveUser(response.user.id,response.user.email, response.user.username)
         return response
     }
 
     suspend fun login(email: String, password: String, rememberMe: Boolean = false): AuthResponse {
         val response = api.login(AuthRequest(email, password, rememberMe))
         tokenDataStore.saveTokens(response.accessToken, response.refreshToken)
+        tokenDataStore.saveUser(response.user.id,response.user.email, response.user.username)
         return response
     }
 
@@ -27,10 +29,17 @@ class AuthService(
         val refreshToken = tokenDataStore.getRefreshToken() ?: throw Exception("No refresh token")
         val response = api.refresh("Bearer $refreshToken")
         tokenDataStore.saveTokens(response.accessToken, response.refreshToken)
+        tokenDataStore.saveUser(response.user.id,response.user.email, response.user.username)
         return response
     }
 
     suspend fun me(): UserDto {
+        val id = tokenDataStore.getUserId()
+        val email = tokenDataStore.getEmail()
+        val username = tokenDataStore.getUsername()
+        if (id != null && email != null && username != null) {
+            return UserDto(id, email,  username)
+        }
         val accessToken = tokenDataStore.getAccessToken() ?: throw Exception("Not logged in")
         return api.me("Bearer $accessToken")
     }

@@ -8,6 +8,7 @@ import com.zdroba.multipitchbuddy.ui.HomeFragment
 import com.zdroba.multipitchbuddy.ui.LogFragment
 import androidx.core.graphics.drawable.toDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.zdroba.multipitchbuddy.ui.ProfileFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             val fragment = when (item.itemId) {
                 R.id.nav_home -> HomeFragment()
                 R.id.nav_log -> LogFragment()
+                R.id.nav_profile -> ProfileFragment()
                 else -> HomeFragment()
             }
             supportFragmentManager.beginTransaction()

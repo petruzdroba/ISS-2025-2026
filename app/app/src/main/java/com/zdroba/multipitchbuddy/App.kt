@@ -3,9 +3,12 @@ package com.zdroba.multipitchbuddy
 import android.app.Application
 
 import com.zdroba.multipitchbuddy.database.AppDatabase
+import com.zdroba.multipitchbuddy.network.RetrofitClient
+import com.zdroba.multipitchbuddy.network.TokenDataStore
 import com.zdroba.multipitchbuddy.repository.ClimbEventRepository
 import com.zdroba.multipitchbuddy.repository.SessionRepository
 import com.zdroba.multipitchbuddy.service.AltitudeRecorderService
+import com.zdroba.multipitchbuddy.service.AuthService
 import com.zdroba.multipitchbuddy.service.ClimbEventService
 import com.zdroba.multipitchbuddy.service.CrudClimbEventService
 import com.zdroba.multipitchbuddy.service.CrudSessionService
@@ -27,4 +30,7 @@ class App: Application() {
 
     val crudClimbEventService by lazy { CrudClimbEventService(climbEventRepository) }
     val crudSessionService by lazy { CrudSessionService(sessionRepository) }
+
+    val tokenDataStore by lazy { TokenDataStore(this) }
+    val authService by lazy { AuthService(tokenDataStore, RetrofitClient.authApi) }
 }
