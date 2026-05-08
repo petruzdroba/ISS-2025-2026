@@ -7,6 +7,7 @@ import com.zdroba.multipitch_server.entity.User
 import com.zdroba.multipitch_server.exceptions.AlreadyExistsException
 import com.zdroba.multipitch_server.exceptions.InvalidCredentialsException
 import com.zdroba.multipitch_server.exceptions.NotFoundException
+import jakarta.transaction.Transactional
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -17,6 +18,7 @@ class AuthService(
     private val jwtService: IJwtService
 ) : IAuthService {
 
+    @Transactional
     override fun register(
         email: String,
         username: String,
