@@ -18,7 +18,15 @@ import kotlinx.coroutines.launch
 
 class LogFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyText: TextView
+    private lateinit var crudSessionService: com.zdroba.multipitchbuddy.service.CrudSessionService
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_log, container, false)
     }
 
@@ -26,48 +34,61 @@ class LogFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val app = requireActivity().application as App
-        val crudSessionService = app.crudSessionService
+        crudSessionService = app.crudSessionService
 
         view.background = MainActivity.appBackground?.toDrawable(resources)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.session_list)
-        val emptyText = view.findViewById<TextView>(R.id.txt_empty)
+        recyclerView = view.findViewById(R.id.session_list)
+        emptyText = view.findViewById(R.id.txt_empty)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        loadSessions()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadSessions()
+    }
+
+    private fun loadSessions() {
         lifecycleScope.launch {
             val sessions = crudSessionService.getAll()
+
+            if (!isAdded) return@launch
 
             if (sessions.isEmpty()) {
                 emptyText.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
-            } else {
-                emptyText.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-                recyclerView.adapter = SessionAdapter(
-                    sessions,
-                    onClick = { session ->
-                        parentFragmentManager.beginTransaction()
-                            .replace(R.id.fragment_container, SessionDetailsFragment.newInstance(session.id))
-                            .addToBackStack(null)
-                            .commit()
-                    },
-                    onLongClick = { session ->
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("Confirm Delete")
-                            .setMessage("Do you really want to delete this session?")
-                            .setPositiveButton("Delete") { _, _ ->
-                                lifecycleScope.launch {
-                                    crudSessionService.delete(session.id)
-                                    parentFragmentManager.beginTransaction()
-                                        .replace(R.id.fragment_container, LogFragment())
-                                        .commit()
-                                }
-                            }
-                            .setNegativeButton("Cancel", null)
-                            .show()
-                    }
-                )
+                recyclerView.adapter = null
+                return@launch
             }
+
+            emptyText.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+
+            recyclerView.adapter = SessionAdapter(
+                sessions,
+                onClick = { session ->
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, SessionDetailsFragment.newInstance(session.id))
+                        .addToBackStack(null)
+                        .commit()
+                },
+                onLongClick = { session ->
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Confirm Delete")
+                        .setMessage("Do you really want to delete this session?")
+                        .setPositiveButton("Delete") { _, _ ->
+                            lifecycleScope.launch {
+                                crudSessionService.delete(session.id)
+                                loadSessions()
+                            }
+                        }
+                        .setNegativeButton("Cancel", null)
+                        .show()
+                }
+            )
         }
     }
 }

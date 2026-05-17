@@ -1,0 +1,91 @@
+package com.zdroba.multipitch_server.service
+
+import com.zdroba.multipitch_server.dao.UserDAO
+import com.zdroba.multipitch_server.dto.AuthResponse
+import com.zdroba.multipitch_server.dto.UserDto
+import com.zdroba.multipitch_server.entity.User
+import com.zdroba.multipitch_server.exceptions.AlreadyExistsException
+import com.zdroba.multipitch_server.exceptions.InvalidCredentialsException
+import com.zdroba.multipitch_server.exceptions.NotFoundException
+import jakarta.transaction.Transactional
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.stereotype.Service
+
+@Service
+class AuthService(
+    private val repository: UserDAO,
+    private val passwordEncoder: PasswordEncoder,
+    private val jwtService: IJwtService
+) : IAuthService {
+
+    @Transactional
+    override fun register(
+        email: String,
+        username: String,
+        password: String,
+        rememberMe: Boolean
+    ): AuthResponse {
+        repository.findByEmail(email)
+            .ifPresent { throw AlreadyExistsException("User with email: $email already exists") }
+
+        repository.findByUsername(username)
+            .ifPresent { throw AlreadyExistsException("User with username: $username already exists") }
+
+        val saved: User = repository.save(User(email, username, passwordEncoder.encode(password)))
+        val dto: UserDto = saved.toDto()
+
+        return AuthResponse(
+            jwtService.generateAccessToken(dto),
+            if (rememberMe) jwtService.generateRefreshToken(dto) else null,
+            dto
+        )
+    }
+
+    override fun login(email: String, password: String, rememberMe: Boolean): AuthResponse {
+        val user = repository.findByEmail(email)
+            .orElseThrow { NotFoundException("User with email: $email does not exist") }
+
+        if (!passwordEncoder.matches(password, user.password)) {
+            throw InvalidCredentialsException()
+        }
+
+        val dto:UserDto = user.toDto()
+        return AuthResponse(
+            jwtService.generateAccessToken(dto),
+            if (rememberMe) jwtService.generateRefreshToken(dto) else null,
+            dto
+        )
+    }
+
+    override fun me(id: Long): UserDto {
+        val user = repository.findById(id)
+            .orElseThrow { NotFoundException("User with id: $id not found") }
+
+        return user.toDto()
+    }
+
+    override fun delete(id: Long) {
+        val user = repository.findById(id)
+            .orElseThrow { NotFoundException("User with id: $id not found") }
+
+        repository.delete(user)
+    }
+
+    override fun refresh(refreshToken: String): AuthResponse {
+
+        val tokenType = jwtService.getTokenType(refreshToken)
+        if (tokenType != "refresh")
+            throw InvalidCredentialsException()
+
+        val id = jwtService.getIdFromToken(refreshToken)
+        val user = repository.findById(id)
+            .orElseThrow { NotFoundException("User with $id was not found") }
+
+        val dto = user.toDto()
+        return AuthResponse(
+            jwtService.generateAccessToken(dto),
+            jwtService.generateRefreshToken(dto),
+            dto
+        )
+    }
+}
